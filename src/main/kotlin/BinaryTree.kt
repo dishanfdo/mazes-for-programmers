@@ -6,8 +6,11 @@ class BinaryTree {
                 val cellToLink = buildList {
                     addIfNotNull(cell.north)
                     addIfNotNull(cell.east)
-                }.random()
-                cell.link(cellToLink)
+                }.randomOrNull()
+
+                if (cellToLink != null) {
+                    cell.link(cellToLink)
+                }
             }
         }
     }
