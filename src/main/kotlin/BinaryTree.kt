@@ -1,5 +1,4 @@
 class BinaryTree {
-
     companion object {
         fun on(grid: Grid) {
             for (cell in grid.cells) {
