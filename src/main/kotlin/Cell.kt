@@ -26,10 +26,10 @@ data class Cell(val row: Int, val column: Int) {
     fun isLinked(cell: Cell): Boolean = cell in _links
 
     val neighbours: List<Cell>
-        get() = mutableListOf<Cell>().apply {
-            north?.let { add(it) }
-            south?.let { add(it) }
-            east?.let { add(it) }
-            west?.let { add(it) }
+        get() = buildList {
+            addIfNotNull(north)
+            addIfNotNull(south)
+            addIfNotNull(east)
+            addIfNotNull(west)
         }
 }
