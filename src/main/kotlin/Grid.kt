@@ -50,5 +50,28 @@ data class Grid(val rowCount: Int, val colCount: Int) {
             return this[row, col]!!
         }
 
+    override fun toString(): String = buildString {
+        append("+${"---+".repeat(colCount)}\n")
+        for (row in rows) {
+            var top = "|"
+            var bottom = "+"
+
+            for (cell in row) {
+                val body = "   " // <-- that's THREE (3) spaces!
+                val east = cell.east
+                val eastBoundary = if (east != null && cell.isLinked(east)) " " else "|"
+                top += body + eastBoundary
+
+                val south = cell.south
+                // three spaces below, too >>------------------------------->> >...<
+                val southBoundary = if (south != null && cell.isLinked(south)) "   " else "---"
+                val corner = "+"
+                bottom += southBoundary + corner
+            }
+
+            append("$top\n")
+            append("$bottom\n")
+        }
+    }
 
 }
