@@ -25,6 +25,26 @@ data class Cell(val row: Int, val column: Int) {
 
     fun isLinked(cell: Cell): Boolean = cell in _links
 
+    fun isLinkedToNorth(): Boolean {
+        val north = north
+        return north != null && isLinked(north)
+    }
+
+    fun isLinkedToEast(): Boolean {
+        val east = east
+        return east != null && isLinked(east)
+    }
+
+    fun isLinkedToWest(): Boolean {
+        val west = west
+        return west != null && isLinked(west)
+    }
+
+    fun isLinkedToSouth(): Boolean {
+        val south = south
+        return south != null && isLinked(south)
+    }
+
     val neighbours: List<Cell>
         get() = buildList {
             addIfNotNull(north)
