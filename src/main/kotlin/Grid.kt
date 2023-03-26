@@ -1,3 +1,5 @@
+import java.awt.Color
+import java.awt.image.BufferedImage
 import kotlin.random.Random
 
 data class Grid(val rowCount: Int, val colCount: Int) {
@@ -72,6 +74,42 @@ data class Grid(val rowCount: Int, val colCount: Int) {
             append("$top\n")
             append("$bottom\n")
         }
+    }
+
+    fun toImage(cellSize: Int = 10): BufferedImage {
+        val imgWidth = cellSize * colCount + 1
+        val imgHeight = cellSize * rowCount + 1
+
+        val background = Color.WHITE
+        val wall = Color.BLACK
+
+        val image = BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_ARGB)
+        val graphics = image.createGraphics()
+        graphics.paint = background
+        graphics.fillRect(0, 0, imgWidth, imgHeight)
+
+        graphics.paint = wall
+        for (cell in cells) {
+            val x1 = cell.column * cellSize
+            val y1 = cell.row * cellSize
+            val x2 = x1 + cellSize
+            val y2 = y1 + cellSize
+
+            if (cell.north == null) {
+                graphics.drawLine(x1, y1, x2, y1)
+            }
+            if (cell.west == null) {
+                graphics.drawLine(x1, y1, x1, y2)
+            }
+            if (!cell.isLinkedToEast()) {
+                graphics.drawLine(x2, y1, x2, y2)
+            }
+            if (!cell.isLinkedToSouth()) {
+                graphics.drawLine(x1, y2, x2, y2)
+            }
+        }
+
+        return image
     }
 
 }
