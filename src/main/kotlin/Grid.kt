@@ -1,8 +1,9 @@
+import Grid.PaintMode.*
 import java.awt.Color
 import java.awt.image.BufferedImage
 import kotlin.random.Random
 
- open class Grid(val rowCount: Int, val colCount: Int) {
+open class Grid(val rowCount: Int, val colCount: Int) {
     val size = rowCount * colCount
 
     private val grid: List<List<Cell>>
@@ -54,6 +55,8 @@ import kotlin.random.Random
 
     open fun contentsOf(cell: Cell): String = " "
 
+    open fun backgroundColorOf(cell: Cell): Color? = null
+
     override fun toString(): String = buildString {
         append("+${"---+".repeat(colCount)}\n")
         for (row in rows) {
@@ -78,6 +81,10 @@ import kotlin.random.Random
         }
     }
 
+    private enum class PaintMode {
+        Background, Walls
+    }
+
     fun toImage(cellSize: Int = 10): BufferedImage {
         val imgWidth = cellSize * colCount + 1
         val imgHeight = cellSize * rowCount + 1
@@ -90,27 +97,36 @@ import kotlin.random.Random
         graphics.paint = background
         graphics.fillRect(0, 0, imgWidth, imgHeight)
 
-        graphics.paint = wall
-        for (cell in cells) {
-            val x1 = cell.column * cellSize
-            val y1 = cell.row * cellSize
-            val x2 = x1 + cellSize
-            val y2 = y1 + cellSize
+        listOf(Background, Walls).forEach { mode ->
+            for (cell in cells) {
+                val x1 = cell.column * cellSize
+                val y1 = cell.row * cellSize
+                val x2 = x1 + cellSize
+                val y2 = y1 + cellSize
 
-            if (cell.north == null) {
-                graphics.drawLine(x1, y1, x2, y1)
-            }
-            if (cell.west == null) {
-                graphics.drawLine(x1, y1, x1, y2)
-            }
-            if (!cell.isLinkedToEast()) {
-                graphics.drawLine(x2, y1, x2, y2)
-            }
-            if (!cell.isLinkedToSouth()) {
-                graphics.drawLine(x1, y2, x2, y2)
+                when (mode) {
+                    Background -> {
+                        graphics.paint = backgroundColorOf(cell)
+                        graphics.fillRect(x1, y1, x2 - x1, y2 - y1)
+                    }
+                    Walls -> {
+                        graphics.paint = wall
+                        if (cell.north == null) {
+                            graphics.drawLine(x1, y1, x2, y1)
+                        }
+                        if (cell.west == null) {
+                            graphics.drawLine(x1, y1, x1, y2)
+                        }
+                        if (!cell.isLinkedToEast()) {
+                            graphics.drawLine(x2, y1, x2, y2)
+                        }
+                        if (!cell.isLinkedToSouth()) {
+                            graphics.drawLine(x1, y2, x2, y2)
+                        }
+                    }
+                }
             }
         }
-
         return image
     }
 
