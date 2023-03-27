@@ -36,4 +36,8 @@ class Distances(val root: Cell) {
 
         return breadcrumbs
     }
+
+    fun max(): Pair<Cell, Int> = cells
+        .map { cell -> cell to (distances[cell] ?: -1)}
+        .maxBy { (_, dist) -> dist }
 }
