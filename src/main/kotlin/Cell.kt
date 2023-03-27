@@ -1,3 +1,5 @@
+import java.util.LinkedList
+
 data class Cell(val row: Int, val column: Int) {
     var north: Cell? = null
     var south: Cell? = null
@@ -52,4 +54,22 @@ data class Cell(val row: Int, val column: Int) {
             addIfNotNull(east)
             addIfNotNull(west)
         }
+
+    fun distances(): Distances {
+        val distances = Distances(this)
+        val frontier = LinkedList<Cell>()
+        frontier.offer(this)
+
+        while (frontier.isNotEmpty()) {
+            val cell = frontier.poll()
+            for (linked in cell.links) {
+                if (linked !in distances) {
+                    distances[linked] = distances[cell]!! + 1
+                    frontier.offer(linked)
+                }
+            }
+        }
+
+        return distances
+    }
 }

@@ -11,6 +11,8 @@ class Distances(val root: Cell) {
         distances[cell] = distance
     }
 
+    operator fun contains(cell: Cell): Boolean = cell in distances
+
     val cells: List<Cell>
         get() = distances.keys.toList()
 }
