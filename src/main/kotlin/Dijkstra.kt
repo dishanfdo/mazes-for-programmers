@@ -7,4 +7,9 @@ fun main() {
 
     grid.distances = distances
     println(grid)
+
+    println("path from northwest corner to southwest corner:")
+    val goal = grid[grid.rowCount - 1, 0] ?: error("Goal cell cannot be null")
+    grid.distances = distances.pathTo(goal)
+    println(grid)
 }
