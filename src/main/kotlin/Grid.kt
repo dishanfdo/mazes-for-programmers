@@ -2,7 +2,7 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import kotlin.random.Random
 
-data class Grid(val rowCount: Int, val colCount: Int) {
+ open class Grid(val rowCount: Int, val colCount: Int) {
     val size = rowCount * colCount
 
     private val grid: List<List<Cell>>
@@ -52,6 +52,8 @@ data class Grid(val rowCount: Int, val colCount: Int) {
             return this[row, col]!!
         }
 
+    open fun contentsOf(cell: Cell): String = " "
+
     override fun toString(): String = buildString {
         append("+${"---+".repeat(colCount)}\n")
         for (row in rows) {
@@ -59,7 +61,7 @@ data class Grid(val rowCount: Int, val colCount: Int) {
             var bottom = "+"
 
             for (cell in row) {
-                val body = "   " // <-- that's THREE (3) spaces!
+                val body = " ${contentsOf(cell)} " // <-- that's THREE (3) spaces!
                 val east = cell.east
                 val eastBoundary = if (east != null && cell.isLinked(east)) " " else "|"
                 top += body + eastBoundary
