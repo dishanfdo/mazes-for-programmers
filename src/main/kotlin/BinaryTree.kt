@@ -1,6 +1,6 @@
 class BinaryTree {
-    companion object {
-        fun on(grid: Grid) {
+    companion object : Algorithm {
+        override fun on(grid: Grid) {
             for (cell in grid.cells) {
                 val cellToLink = buildList {
                     addIfNotNull(cell.north)

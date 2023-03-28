@@ -1,10 +1,10 @@
 import kotlin.random.Random
 
 class Sidewinder {
-    companion object {
+    companion object : Algorithm {
         private val random = Random(System.currentTimeMillis())
 
-        fun on(grid: Grid) {
+        override fun on(grid: Grid) {
             val run = mutableListOf<Cell>()
 
             for (row in grid.rows) {

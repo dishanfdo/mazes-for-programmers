@@ -1,13 +1,13 @@
 class HuntAndKill {
-    companion object {
-        fun on(grid: Grid) {
+    companion object : Algorithm {
+        override fun on(grid: Grid) {
             fun Cell.isVisited() = links.isNotEmpty()
             fun Cell.isNotVisited() = !isVisited()
             fun Cell.unvisitedNeighbours() = neighbours.filter { it.isNotVisited() }
             fun Cell.visitedNeighbours() = neighbours.filter { it.isVisited() }
 
             var current: Cell? = grid.randomCell()
-            while(current != null) {
+            while (current != null) {
                 val unvisitedNeighbours = current.unvisitedNeighbours()
                 if (unvisitedNeighbours.isNotEmpty()) {
                     val neighbour = unvisitedNeighbours.random()

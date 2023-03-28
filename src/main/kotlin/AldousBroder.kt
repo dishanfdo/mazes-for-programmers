@@ -1,6 +1,6 @@
 class AldousBroder {
-    companion object {
-        fun on(grid: Grid) {
+    companion object : Algorithm {
+        override fun on(grid: Grid) {
             var cell = grid.randomCell()
             var unvisited = grid.size - 1
 
