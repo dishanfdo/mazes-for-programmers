@@ -1,3 +1,7 @@
+package algorithms
+
+import models.Cell
+import models.Grid
 import kotlin.random.Random
 
 class Sidewinder {

@@ -1,3 +1,8 @@
+package algorithms
+
+import models.Cell
+import models.Grid
+
 class AldousBroder {
     companion object : Algorithm {
         override fun on(grid: Grid) {

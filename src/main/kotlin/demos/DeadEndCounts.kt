@@ -1,3 +1,8 @@
+package demos
+
+import models.Grid
+import algorithms.*
+
 fun main() {
     val algorithms = listOf(BinaryTree, Sidewinder, AldousBroder, Wilsons, HuntAndKill)
 

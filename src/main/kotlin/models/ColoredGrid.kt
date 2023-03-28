@@ -1,3 +1,5 @@
+package models
+
 import java.awt.Color
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates

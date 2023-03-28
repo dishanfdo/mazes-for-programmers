@@ -1,3 +1,8 @@
+package algorithms
+
+import models.Grid
+import addIfNotNull
+
 class BinaryTree {
     companion object : Algorithm {
         override fun on(grid: Grid) {

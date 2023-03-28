@@ -1,3 +1,5 @@
+package models
+
 class Distances(val root: Cell) {
     private val distances = mutableMapOf<Cell, Int>()
 

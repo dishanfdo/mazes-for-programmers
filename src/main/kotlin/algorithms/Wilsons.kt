@@ -1,3 +1,10 @@
+package algorithms
+
+import models.Cell
+import models.Grid
+import removeAllAfter
+import removeRandomElement
+
 class Wilsons {
     companion object : Algorithm {
         override fun on(grid: Grid) {

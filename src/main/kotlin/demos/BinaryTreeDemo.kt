@@ -1,3 +1,9 @@
+package demos
+
+import models.Grid
+import algorithms.BinaryTree
+import saveAsPng
+
 fun main() {
     repeat(1) {
         val grid = Grid(20, 20)

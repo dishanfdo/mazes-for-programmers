@@ -1,3 +1,8 @@
+package demos
+
+import models.DistanceGrid
+import algorithms.BinaryTree
+
 fun main() {
     val grid = DistanceGrid(5, 5)
     BinaryTree.on(grid)

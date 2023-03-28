@@ -1,3 +1,6 @@
+package models
+
+import addIfNotNull
 import java.util.LinkedList
 
 data class Cell(val row: Int, val column: Int) {

@@ -1,3 +1,9 @@
+package demos
+
+import models.ColoredGrid
+import algorithms.BinaryTree
+import saveAsPng
+
 fun main() {
     val grid = ColoredGrid(25, 25)
     BinaryTree.on(grid)

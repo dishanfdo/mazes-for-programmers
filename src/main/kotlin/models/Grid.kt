@@ -1,4 +1,6 @@
-import Grid.PaintMode.*
+package models
+
+import models.Grid.PaintMode.*
 import java.awt.Color
 import java.awt.image.BufferedImage
 import kotlin.random.Random
