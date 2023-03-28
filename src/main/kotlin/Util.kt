@@ -11,3 +11,16 @@ fun <T> MutableCollection<T>.addIfNotNull(value: T?) {
 fun RenderedImage.saveAsPng(path: String) {
     ImageIO.write(this, "png", File(path))
 }
+
+/**
+ * Remove all elements comes after the given index
+ */
+fun <T> MutableList<T>.removeAllAfter(index: Int) {
+    removeAll(slice((index + 1) until size))
+}
+
+fun <T> MutableCollection<T>.removeRandomElement(): T {
+    val element = random()
+    remove(element)
+    return element
+}
