@@ -129,4 +129,6 @@ open class Grid(val rowCount: Int, val colCount: Int) {
         return image
     }
 
+    fun deadEnds(): List<Cell> = cells.filter { it.links.size == 1 }.toList()
+
 }
