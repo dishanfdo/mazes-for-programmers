@@ -5,6 +5,8 @@ import models.Grid
 
 class AldousBroder {
     companion object : Algorithm {
+        override val name = "AldousBroder"
+
         override fun on(grid: Grid) {
             var cell = grid.randomCell()
             var unvisited = grid.size - 1

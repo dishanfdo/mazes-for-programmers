@@ -7,6 +7,8 @@ import removeRandomElement
 
 class Wilsons {
     companion object : Algorithm {
+        override val name = "Wilsons"
+
         override fun on(grid: Grid) {
             val unvisited = grid.cells.toMutableSet()
             unvisited.removeRandomElement()

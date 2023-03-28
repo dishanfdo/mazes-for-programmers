@@ -5,6 +5,8 @@ import models.Grid
 
 class HuntAndKill {
     companion object : Algorithm {
+        override val name = "HuntAndKill"
+
         override fun on(grid: Grid) {
             fun Cell.isVisited() = links.isNotEmpty()
             fun Cell.isNotVisited() = !isVisited()

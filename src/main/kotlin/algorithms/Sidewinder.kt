@@ -6,6 +6,8 @@ import kotlin.random.Random
 
 class Sidewinder {
     companion object : Algorithm {
+        override val name = "Sidewinder"
+
         private val random = Random(System.currentTimeMillis())
 
         override fun on(grid: Grid) {

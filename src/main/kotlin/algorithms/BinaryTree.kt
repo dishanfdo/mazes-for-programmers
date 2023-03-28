@@ -5,6 +5,8 @@ import addIfNotNull
 
 class BinaryTree {
     companion object : Algorithm {
+        override val name = "BinaryTree"
+
         override fun on(grid: Grid) {
             for (cell in grid.cells) {
                 val cellToLink = buildList {
