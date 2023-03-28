@@ -46,12 +46,11 @@ open class Grid(val rowCount: Int, val colCount: Int) {
         return grid[row][col]
     }
 
-    val randomCell: Cell
-        get() {
-            val row = random.nextInt(rowCount)
-            val col = random.nextInt(grid[row].size)
-            return this[row, col]!!
-        }
+    fun randomCell(): Cell {
+        val row = random.nextInt(rowCount)
+        val col = random.nextInt(grid[row].size)
+        return this[row, col]!!
+    }
 
     open fun contentsOf(cell: Cell): String = " "
 
