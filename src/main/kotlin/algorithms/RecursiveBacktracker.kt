@@ -13,7 +13,7 @@ class RecursiveBacktracker {
             on(start)
         }
 
-        private fun on(start: Cell) {
+        fun on(start: Cell) {
             fun Cell.isVisited() = links.isNotEmpty()
             fun Cell.isNotVisited() = !isVisited()
             fun Cell.unvisitedNeighbours() = neighbours.filter { it.isNotVisited() }
