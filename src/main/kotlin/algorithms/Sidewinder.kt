@@ -15,6 +15,7 @@ class Sidewinder {
 
             for (row in grid.rows) {
                 for (cell in row) {
+                    cell ?: error("Null cells not supported in Sidewinder")
                     run.add(cell)
 
                     val isAtEastBoundary = cell.east == null

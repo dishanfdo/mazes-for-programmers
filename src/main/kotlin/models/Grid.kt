@@ -6,17 +6,16 @@ import java.awt.image.BufferedImage
 import kotlin.random.Random
 
 open class Grid(val rowCount: Int, val colCount: Int) {
-    val size = rowCount * colCount
+    open val size = rowCount * colCount
 
-    private val grid: List<List<Cell>>
     private val random: Random = Random(System.currentTimeMillis())
-
-    init {
-        grid = prepareGrid()
-        configureCells()
+    private val grid: List<List<Cell?>> by lazy {
+        val data = prepareGrid()
+        configureCells(data)
+        data
     }
 
-    private fun prepareGrid(): List<List<Cell>> {
+    protected open fun prepareGrid(): List<List<Cell?>> {
         return List(rowCount) { row ->
             List(colCount) { col ->
                 Cell(row, col)
@@ -24,23 +23,23 @@ open class Grid(val rowCount: Int, val colCount: Int) {
         }
     }
 
-    private fun configureCells() {
-        for (cell in cells) {
+    private fun configureCells(cells: List<List<Cell?>>) {
+        for (cell in cells.flatten().filterNotNull()) {
             val row = cell.row
             val col = cell.column
 
-            cell.north = this[row - 1, col]
-            cell.south = this[row + 1, col]
-            cell.west = this[row, col - 1]
-            cell.east = this[row, col + 1]
+            cell.north = cells.getOrNull(row - 1)?.getOrNull(col)
+            cell.south = cells.getOrNull(row + 1)?.getOrNull(col)
+            cell.west = cells.getOrNull(row)?.getOrNull(col - 1)
+            cell.east = cells.getOrNull(row)?.getOrNull(col + 1)
         }
     }
 
-    val rows: Sequence<List<Cell>>
+    val rows: Sequence<List<Cell?>>
         get() = grid.asSequence()
 
     val cells: Sequence<Cell>
-        get() = rows.map { row -> row.asSequence() }.flatten()
+        get() = rows.map { row -> row.asSequence() }.flatten().filterNotNull()
 
     operator fun get(row: Int, col: Int): Cell? {
         if (row !in 0 until rowCount) return null
@@ -48,7 +47,7 @@ open class Grid(val rowCount: Int, val colCount: Int) {
         return grid[row][col]
     }
 
-    fun randomCell(): Cell {
+    open fun randomCell(): Cell {
         val row = random.nextInt(rowCount)
         val col = random.nextInt(grid[row].size)
         return this[row, col]!!
@@ -64,7 +63,9 @@ open class Grid(val rowCount: Int, val colCount: Int) {
             var top = "|"
             var bottom = "+"
 
-            for (cell in row) {
+            for (possibleCell in row) {
+                val cell = possibleCell ?: Cell(-1, -1)
+
                 val body = " ${contentsOf(cell)} " // <-- that's THREE (3) spaces!
                 val east = cell.east
                 val eastBoundary = if (east != null && cell.isLinked(east)) " " else "|"
@@ -110,6 +111,7 @@ open class Grid(val rowCount: Int, val colCount: Int) {
                         graphics.paint = backgroundColorOf(cell)
                         graphics.fillRect(x1, y1, x2 - x1, y2 - y1)
                     }
+
                     Walls -> {
                         graphics.paint = wall
                         if (cell.north == null) {
