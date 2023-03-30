@@ -1,6 +1,9 @@
 package models
 
+import java.awt.Color
+import java.awt.image.BufferedImage
 import java.io.File
+import javax.imageio.ImageIO
 
 class Mask(val rows: Int, val columns: Int) {
     private val bits = MutableList(rows) { MutableList(columns) { true } }
@@ -18,6 +21,26 @@ class Mask(val rows: Int, val columns: Int) {
                 }
             }
 
+            return mask
+        }
+
+        fun fromPng(filePath: String): Mask {
+            /** For some reason, the image is read as rotated (at least in mac)
+             * TODO: Find a way to figure out the rotation from the image itself
+             */
+            fun BufferedImage.isRotated(): Boolean = true
+
+            val image = ImageIO.read(File(filePath))
+            val isRotated = image.isRotated()
+            val width = if (!isRotated) image.width else image.height
+            val height = if (!isRotated) image.height else image.width
+            val mask = Mask(width, height)
+            for (row in 0 until mask.rows) {
+                for (col in 0 until mask.columns) {
+                    val pixel = if (!isRotated) image.getRGB(row, col) else image.getRGB(col, row)
+                    mask[row, col] = pixel != Color.BLACK.rgb
+                }
+            }
             return mask
         }
     }
