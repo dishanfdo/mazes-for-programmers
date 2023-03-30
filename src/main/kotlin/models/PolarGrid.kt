@@ -1,0 +1,57 @@
+package models
+
+import java.awt.Color
+import java.awt.RenderingHints
+import java.awt.image.BufferedImage
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
+
+class PolarGrid(rowCount: Int, colCount: Int) : Grid(rowCount, colCount) {
+    override fun toImage(cellSize: Int): BufferedImage {
+        val imgSize = 2 * rowCount * cellSize + 1
+
+        val background = Color.WHITE
+        val wall = Color.BLACK
+
+        val image = BufferedImage(imgSize, imgSize, BufferedImage.TYPE_INT_ARGB)
+        val graphics = image.createGraphics()
+        graphics.setRenderingHint(
+            RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON
+        )
+        graphics.paint = background
+        graphics.fillRect(0, 0, imgSize, imgSize)
+        val center = imgSize / 2
+
+        graphics.paint = wall
+        for (cell in cells) {
+            val theta = 2 * PI / grid[cell.row].size
+            val innerRadius = cell.row * cellSize
+            val outerRadius = innerRadius + cellSize
+            val thetaCcw = cell.column * theta
+            val thetaCw = thetaCcw + theta
+
+            val ax = center + (innerRadius * cos(thetaCcw)).toInt()
+            val ay = center + (innerRadius * sin(thetaCcw)).toInt()
+            val bx = center + (outerRadius * cos(thetaCcw)).toInt()
+            val by = center + (outerRadius * sin(thetaCcw)).toInt()
+
+            val cx = center + (innerRadius * cos(thetaCw)).toInt()
+            val cy = center + (innerRadius * sin(thetaCw)).toInt()
+            val dx = center + (outerRadius * cos(thetaCw)).toInt()
+            val dy = center + (outerRadius * sin(thetaCw)).toInt()
+
+            if (!cell.isLinkedToNorth()) {
+                graphics.drawLine(ax, ay, cx, cy)
+            }
+            if (!cell.isLinkedToEast()) {
+                graphics.drawLine(cx, cy, dx, dy)
+            }
+        }
+        val size = 2 * rowCount * cellSize
+        graphics.drawOval(0, 0, size, size)
+
+        return image
+    }
+}

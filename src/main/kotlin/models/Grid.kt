@@ -9,7 +9,7 @@ open class Grid(val rowCount: Int, val colCount: Int) {
     open val size = rowCount * colCount
 
     private val random: Random = Random(System.currentTimeMillis())
-    private val grid: List<List<Cell?>> by lazy {
+    protected val grid: List<List<Cell?>> by lazy {
         val data = prepareGrid()
         configureCells(data)
         data
@@ -87,7 +87,7 @@ open class Grid(val rowCount: Int, val colCount: Int) {
         Background, Walls
     }
 
-    fun toImage(cellSize: Int = 10): BufferedImage {
+    open fun toImage(cellSize: Int = 10): BufferedImage {
         val imgWidth = cellSize * colCount + 1
         val imgHeight = cellSize * rowCount + 1
 
