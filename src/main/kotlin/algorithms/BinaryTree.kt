@@ -10,8 +10,10 @@ class BinaryTree {
         override fun on(grid: Grid) {
             for (cell in grid.cells) {
                 val cellToLink = buildList {
-                    addIfNotNull(cell.north)
-                    addIfNotNull(cell.east)
+                    val north = grid[cell.row - 1, cell.column]
+                    addIfNotNull(north)
+                    val east = grid[cell.row, cell.column + 1]
+                    addIfNotNull(east)
                 }.randomOrNull()
 
                 if (cellToLink != null) {
