@@ -88,7 +88,7 @@ open class Grid protected constructor(val rowCount: Int, val colCount: Int) {
         }
     }
 
-    private enum class PaintMode {
+    protected enum class PaintMode {
         Background, Walls
     }
 

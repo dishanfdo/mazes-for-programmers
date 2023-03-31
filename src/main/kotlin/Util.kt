@@ -24,3 +24,6 @@ fun <T> MutableCollection<T>.removeRandomElement(): T {
     remove(element)
     return element
 }
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Int.isEven() = this % 2 == 0
