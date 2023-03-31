@@ -3,7 +3,7 @@ package models
 import addIfNotNull
 import java.util.LinkedList
 
-data class Cell(val row: Int, val column: Int) {
+open class Cell(val row: Int, val column: Int) {
     var north: Cell? = null
     var south: Cell? = null
     var east: Cell? = null
@@ -50,7 +50,7 @@ data class Cell(val row: Int, val column: Int) {
         return south != null && isLinked(south)
     }
 
-    val neighbours: List<Cell>
+    open val neighbours: List<Cell>
         get() = buildList {
             addIfNotNull(north)
             addIfNotNull(south)

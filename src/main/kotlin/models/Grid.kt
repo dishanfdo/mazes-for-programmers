@@ -23,7 +23,7 @@ open class Grid(val rowCount: Int, val colCount: Int) {
         }
     }
 
-    private fun configureCells(cells: List<List<Cell?>>) {
+    open fun configureCells(cells: List<List<Cell?>>) {
         for (cell in cells.flatten().filterNotNull()) {
             val row = cell.row
             val col = cell.column
@@ -41,7 +41,7 @@ open class Grid(val rowCount: Int, val colCount: Int) {
     val cells: Sequence<Cell>
         get() = rows.map { row -> row.asSequence() }.flatten().filterNotNull()
 
-    operator fun get(row: Int, col: Int): Cell? {
+    open operator fun get(row: Int, col: Int): Cell? {
         if (row !in 0 until rowCount) return null
         if (col !in 0 until colCount) return null
         return grid[row][col]
