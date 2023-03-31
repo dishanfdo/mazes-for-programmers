@@ -4,7 +4,13 @@ import java.awt.Color
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
-class ColoredGrid(rowCount: Int, colCount: Int) : Grid(rowCount, colCount) {
+class ColoredGrid private constructor(rowCount: Int, colCount: Int) : Grid(rowCount, colCount) {
+    companion object {
+        operator fun invoke(rowCount: Int, colCount: Int): ColoredGrid {
+            return ColoredGrid(rowCount, colCount).apply { initGrid() }
+        }
+    }
+
     private var maxDist: Int? = 0
 
     var distances: Distances? by Delegates.observable(null) { _, _, _ ->

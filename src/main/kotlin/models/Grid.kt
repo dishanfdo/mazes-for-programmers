@@ -5,15 +5,20 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import kotlin.random.Random
 
-open class Grid(val rowCount: Int, val colCount: Int) {
+open class Grid protected constructor(val rowCount: Int, val colCount: Int) {
     open val size = rowCount * colCount
+    protected lateinit var grid: List<List<Cell?>>
+
+    companion object {
+        operator fun invoke(rowCount: Int, colCount: Int): Grid = Grid(rowCount, colCount).apply { initGrid() }
+    }
+
+    fun initGrid() {
+        grid = prepareGrid()
+        configureCells()
+    }
 
     private val random: Random = Random(System.currentTimeMillis())
-    protected val grid: List<List<Cell?>> by lazy {
-        val data = prepareGrid()
-        configureCells(data)
-        data
-    }
 
     protected open fun prepareGrid(): List<List<Cell?>> {
         return List(rowCount) { row ->
@@ -23,15 +28,15 @@ open class Grid(val rowCount: Int, val colCount: Int) {
         }
     }
 
-    open fun configureCells(cells: List<List<Cell?>>) {
-        for (cell in cells.flatten().filterNotNull()) {
+    open fun configureCells() {
+        for (cell in cells) {
             val row = cell.row
             val col = cell.column
 
-            cell.north = cells.getOrNull(row - 1)?.getOrNull(col)
-            cell.south = cells.getOrNull(row + 1)?.getOrNull(col)
-            cell.west = cells.getOrNull(row)?.getOrNull(col - 1)
-            cell.east = cells.getOrNull(row)?.getOrNull(col + 1)
+            cell.north = this[row - 1, col]
+            cell.south = this[row + 1, col]
+            cell.west = this[row, col - 1]
+            cell.east = this[row, col + 1]
         }
     }
 

@@ -1,8 +1,12 @@
 package models
 
-class MaskedGrid(val mask: Mask) : Grid(mask.rows, mask.columns) {
+class MaskedGrid private constructor(val mask: Mask) : Grid(mask.rows, mask.columns) {
 
     override val size = mask.count
+
+    companion object {
+        operator fun invoke(mask: Mask): MaskedGrid = MaskedGrid(mask).apply { initGrid() }
+    }
 
     override fun prepareGrid(): List<List<Cell?>> {
         return List(rowCount) { row ->

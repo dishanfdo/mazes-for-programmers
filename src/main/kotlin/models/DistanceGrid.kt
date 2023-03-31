@@ -1,6 +1,12 @@
 package models
 
-class DistanceGrid(rowCount: Int, colCount: Int) : Grid(rowCount, colCount) {
+class DistanceGrid private constructor(rowCount: Int, colCount: Int) : Grid(rowCount, colCount) {
+    companion object {
+        operator fun invoke(rowCount: Int, colCount: Int): DistanceGrid {
+            return DistanceGrid(rowCount, colCount).apply { initGrid() }
+        }
+    }
+
 
     var distances: Distances? = null
 

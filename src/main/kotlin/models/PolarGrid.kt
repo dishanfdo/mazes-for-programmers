@@ -8,7 +8,11 @@ import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
-class PolarGrid(rowCount: Int) : Grid(rowCount, 1) {
+class PolarGrid private constructor(rowCount: Int) : Grid(rowCount, 1) {
+
+    companion object {
+        operator fun invoke(rowCount: Int): PolarGrid = PolarGrid(rowCount).apply { initGrid() }
+    }
 
     override fun prepareGrid(): List<List<Cell?>> {
         val rows = List(rowCount) { mutableListOf<PolarCell>() }
@@ -30,21 +34,27 @@ class PolarGrid(rowCount: Int) : Grid(rowCount, 1) {
         return rows
     }
 
-    override fun configureCells(cells: List<List<Cell?>>) {
-        for (cell in cells.flatten().filterNotNull().filterIsInstance<PolarCell>()) {
+    override fun configureCells() {
+        for (cell in cells.filterIsInstance<PolarCell>()) {
             val row = cell.row
             val col = cell.column
-            if (row > 0) {
-                val totalColumns = cells[row].size
-                cell.cw = cells[row].getOrNull((col + 1).mod(totalColumns)) as PolarCell?
-                cell.ccw = cells[row].getOrNull((col - 1).mod(totalColumns)) as PolarCell?
 
-                val ratio = totalColumns / cells[row - 1].size
-                val parent = cells[row - 1][col / ratio] as PolarCell
+            if (row > 0) {
+                val totalColumns = grid[row].size
+                cell.cw = this[row, col + 1] as PolarCell
+                cell.ccw = this[row, col - 1] as PolarCell
+
+                val ratio = totalColumns / grid[row - 1].size
+                val parent = grid[row - 1][col / ratio] as PolarCell
                 parent.outward.add(cell)
                 cell.inward = parent
             }
         }
+    }
+
+    override fun get(row: Int, col: Int): Cell? {
+        if (row !in 0 until rowCount) return null
+        return grid[row][col.mod(grid[row].size)]
     }
 
     override fun randomCell(): Cell {
