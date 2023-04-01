@@ -140,4 +140,15 @@ open class Grid protected constructor(val rowCount: Int, val colCount: Int) {
 
     fun deadEnds(): List<Cell> = cells.filter { it.links.size == 1 }.toList()
 
+    fun braid(p: Double = 1.0) {
+        for (cell in deadEnds().shuffled()) {
+            if (cell.links.size != 1 || random.nextDouble() > p) continue
+
+            val neighbours = cell.neighbours.filter { !it.isLinked(cell) }
+            val best = neighbours.filter { it.links.size == 1 }.ifEmpty { neighbours }
+
+            val neighbour = best.random()
+            cell.link(neighbour)
+        }
+    }
 }

@@ -7,6 +7,7 @@ import saveAsPng
 fun main() {
     val grid = Grid(20, 20)
     RecursiveBacktracker.on(grid)
+    grid.braid(0.5)
 
     grid.toImage().saveAsPng("./mazes/recursive_backtracker.png")
 }
