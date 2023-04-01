@@ -6,6 +6,7 @@ import algorithms.BinaryTree
 fun main() {
     val grid = DistanceGrid(5, 5)
     BinaryTree.on(grid)
+    grid.braid()
 
     val start = grid[0, 0] ?: error("Start cell cannot be null")
     val distances = start.distances()
