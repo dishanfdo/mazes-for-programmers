@@ -2,6 +2,7 @@ package models
 
 import models.Grid.PaintMode.*
 import java.awt.Color
+import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import kotlin.random.Random
 
@@ -92,9 +93,10 @@ open class Grid protected constructor(val rowCount: Int, val colCount: Int) {
         Background, Walls
     }
 
-    open fun toImage(cellSize: Int = 10): BufferedImage {
+    open fun toImage(cellSize: Int = 10, insetFraction: Double = 0.0): BufferedImage {
         val imgWidth = cellSize * colCount + 1
         val imgHeight = cellSize * rowCount + 1
+        val inset = (cellSize * insetFraction).toInt()
 
         val background = Color.WHITE
         val wall = Color.BLACK
@@ -106,36 +108,125 @@ open class Grid protected constructor(val rowCount: Int, val colCount: Int) {
 
         listOf(Background, Walls).forEach { mode ->
             for (cell in cells) {
-                val x1 = cell.column * cellSize
-                val y1 = cell.row * cellSize
-                val x2 = x1 + cellSize
-                val y2 = y1 + cellSize
+                val x = cell.column * cellSize
+                val y = cell.row * cellSize
 
-                when (mode) {
-                    Background -> {
-                        graphics.paint = backgroundColorOf(cell) ?: background
-                        graphics.fillRect(x1, y1, x2 - x1, y2 - y1)
-                    }
-
-                    Walls -> {
-                        graphics.paint = wall
-                        if (cell.north == null) {
-                            graphics.drawLine(x1, y1, x2, y1)
-                        }
-                        if (cell.west == null) {
-                            graphics.drawLine(x1, y1, x1, y2)
-                        }
-                        if (!cell.isLinkedToEast()) {
-                            graphics.drawLine(x2, y1, x2, y2)
-                        }
-                        if (!cell.isLinkedToSouth()) {
-                            graphics.drawLine(x1, y2, x2, y2)
-                        }
-                    }
+                if (inset > 0) {
+                    toImageWithInset(graphics, cell, mode, cellSize, wall, x, y, inset, background)
+                } else {
+                    toImageWithoutInset(graphics, cell, mode, cellSize, wall, x, y, background)
                 }
             }
         }
         return image
+    }
+
+    private fun toImageWithInset(graphics: Graphics2D, cell: Cell, mode: PaintMode, cellSize: Int, wall: Color, x: Int, y: Int, inset: Int, defaultBackground: Color) {
+        val coordinates = cellCoordinatesWithInset(x, y, cellSize, inset)
+        val x1 = coordinates[0]
+        val x2 = coordinates[1]
+        val x3 = coordinates[2]
+        val x4 = coordinates[3]
+        val y1 = coordinates[4]
+        val y2 = coordinates[5]
+        val y3 = coordinates[6]
+        val y4 = coordinates[7]
+
+        when (mode) {
+            Background -> {
+                graphics.paint = backgroundColorOf(cell) ?: defaultBackground
+                graphics.fillRect(x2, y2, x3 - x2, y3 - y2)
+                if (cell.isLinkedToNorth()) {
+                    graphics.fillRect(x2, y1, x3 - x2, y2 - y1)
+                }
+
+                if (cell.isLinkedToSouth()) {
+                    graphics.fillRect(x2, y3, x3 - x2, y4 - y3)
+                }
+
+                if (cell.isLinkedToWest()) {
+                    graphics.fillRect(x1, y2, x2 - x1, y3 - y2)
+                }
+
+                if (cell.isLinkedToEast()) {
+                    graphics.fillRect(x3, y2, x4 - x3, y3 - y2)
+                }
+            }
+            Walls -> {
+                graphics.paint = wall
+                if (cell.isLinkedToNorth()) {
+                    graphics.drawLine(x2, y1, x2, y2)
+                    graphics.drawLine(x3, y1, x3, y2)
+                } else {
+                    graphics.drawLine(x2, y2, x3, y2)
+                }
+
+                if (cell.isLinkedToSouth()) {
+                    graphics.drawLine(x2, y3, x2, y4)
+                    graphics.drawLine(x3, y3, x3, y4)
+                } else {
+                    graphics.drawLine(x2, y3, x3, y3)
+                }
+
+                if (cell.isLinkedToWest()) {
+                    graphics.drawLine(x1, y2, x2, y2)
+                    graphics.drawLine(x1, y3, x2, y3)
+                } else {
+                    graphics.drawLine(x2, y2, x2, y3)
+                }
+
+                if (cell.isLinkedToEast()) {
+                    graphics.drawLine(x3, y2, x4, y2)
+                    graphics.drawLine(x3, y3, x4, y3)
+                } else {
+                    graphics.drawLine(x3, y2, x3, y3)
+                }
+            }
+        }
+    }
+
+    private fun toImageWithoutInset(graphics: Graphics2D, cell: Cell, mode: PaintMode, cellSize: Int, wall: Color, x: Int, y: Int, defaultBackground: Color) {
+        val x1 = x
+        val y1 = y
+        val x2 = x1 + cellSize
+        val y2 = y1 + cellSize
+
+        when (mode) {
+            Background -> {
+                graphics.paint = backgroundColorOf(cell) ?: defaultBackground
+                graphics.fillRect(x1, y1, x2 - x1, y2 - y1)
+            }
+
+            Walls -> {
+                graphics.paint = wall
+                if (cell.north == null) {
+                    graphics.drawLine(x1, y1, x2, y1)
+                }
+                if (cell.west == null) {
+                    graphics.drawLine(x1, y1, x1, y2)
+                }
+                if (!cell.isLinkedToEast()) {
+                    graphics.drawLine(x2, y1, x2, y2)
+                }
+                if (!cell.isLinkedToSouth()) {
+                    graphics.drawLine(x1, y2, x2, y2)
+                }
+            }
+        }
+    }
+
+    private fun cellCoordinatesWithInset(x: Int, y: Int, cellSize: Int, inset: Int): List<Int> {
+        val x1 = x
+        val x4 = x + cellSize
+        val x2 = x1 + inset
+        val x3 = x4 - inset
+
+        val y1 = y
+        val y4 = y + cellSize
+        val y2 = y1 + inset
+        val y3 = y4 - inset
+
+        return listOf(x1, x2, x3, x4, y1, y2, y3, y4)
     }
 
     fun deadEnds(): List<Cell> = cells.filter { it.links.size == 1 }.toList()

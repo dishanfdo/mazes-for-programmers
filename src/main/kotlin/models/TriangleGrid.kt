@@ -39,7 +39,7 @@ class TriangleGrid private constructor(rowCount: Int, colCount: Int) : Grid(rowC
         }
     }
 
-    override fun toImage(cellSize: Int): BufferedImage {
+    override fun toImage(cellSize: Int, insetFraction: Double): BufferedImage {
         val halfWidth = cellSize / 2.0
         val height = cellSize * sqrt(3.0) / 2
         val halfHeight = height / 2.0

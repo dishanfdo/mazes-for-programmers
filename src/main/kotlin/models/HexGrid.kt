@@ -41,7 +41,7 @@ class HexGrid private constructor(rowCount: Int, colCount: Int) : Grid(rowCount,
         }
     }
 
-    override fun toImage(cellSize: Int): BufferedImage {
+    override fun toImage(cellSize: Int, insetFraction: Double): BufferedImage {
         val a = cellSize / 2.0
         val b = cellSize * sqrt(3.0) / 2.0
         val height = b * 2

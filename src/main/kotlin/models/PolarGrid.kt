@@ -63,7 +63,7 @@ class PolarGrid private constructor(rowCount: Int) : Grid(rowCount, 1) {
         return grid[row][col]!!
     }
 
-    override fun toImage(cellSize: Int): BufferedImage {
+    override fun toImage(cellSize: Int, insetFraction: Double): BufferedImage {
         val imgSize = 2 * rowCount * cellSize + 1
 
         val background = Color.WHITE
