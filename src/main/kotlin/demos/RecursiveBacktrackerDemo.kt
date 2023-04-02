@@ -9,5 +9,5 @@ fun main() {
     RecursiveBacktracker.on(grid)
     grid.braid(0.5)
 
-    grid.toImage().saveAsPng("./mazes/recursive_backtracker.png")
+    grid.toImage(insetFraction = 0.1).saveAsPng("./mazes/recursive_backtracker.png")
 }
