@@ -113,7 +113,7 @@ open class Grid protected constructor(val rowCount: Int, val colCount: Int) {
 
                 when (mode) {
                     Background -> {
-                        graphics.paint = backgroundColorOf(cell)
+                        graphics.paint = backgroundColorOf(cell) ?: background
                         graphics.fillRect(x1, y1, x2 - x1, y2 - y1)
                     }
 
