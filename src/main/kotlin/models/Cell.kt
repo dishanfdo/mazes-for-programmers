@@ -58,7 +58,7 @@ open class Cell(val row: Int, val column: Int) {
             addIfNotNull(west)
         }
 
-    fun distances(): Distances {
+    open fun distances(): Distances {
         val distances = Distances(this)
         val frontier = LinkedList<Cell>()
         frontier.offer(this)
