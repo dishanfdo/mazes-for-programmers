@@ -7,7 +7,7 @@ abstract class WeaveCell(row: Int, column: Int) : Cell(row, column) {
     abstract fun isVerticalPassage(): Boolean
 }
 
-class OverCell(row: Int, column: Int, val grid: WeaveGrid) : WeaveCell(row, column) {
+open class OverCell(row: Int, column: Int, val grid: WeaveGrid) : WeaveCell(row, column) {
 
     override val neighbours: List<Cell>
         get() = buildList {

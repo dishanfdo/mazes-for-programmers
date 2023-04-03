@@ -5,7 +5,7 @@ import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 
-class WeaveGrid private constructor(rowCount: Int, colCount: Int) : Grid(rowCount, colCount) {
+open class WeaveGrid protected constructor(rowCount: Int, colCount: Int) : Grid(rowCount, colCount) {
 
     private val underCells = mutableListOf<UnderCell>()
 

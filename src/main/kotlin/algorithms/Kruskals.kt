@@ -2,6 +2,9 @@ package algorithms
 
 import models.Cell
 import models.Grid
+import models.OverCell
+import models.WeaveGrid
+import kotlin.random.Random
 
 class Kruskals {
     companion object : Algorithm {
@@ -46,12 +49,49 @@ class Kruskals {
 
                 cellsInSet.remove(loserSet)
             }
+
+            fun addCrossing(cell: Cell): Boolean {
+                if (grid !is WeaveGrid) return false
+                if (cell.links.isNotEmpty()) return false
+
+                val east = cell.east ?: return false
+                val west = cell.west ?: return false
+                val north = cell.north ?: return false
+                val south = cell.south ?: return false
+                if (!canMerge(east, west)) return false
+                if (!canMerge(north, south)) return false
+
+                neighbours.removeIf { (left, right) -> left == cell || right == cell }
+
+                val rand = Random(System.currentTimeMillis())
+                if (rand.nextBoolean()) {
+                    merge(west, cell)
+                    merge(cell, east)
+
+                    grid.tunnelUnder(cell as OverCell)
+                    merge(north, north.south!!)
+                    merge(south, south.north!!)
+                } else {
+                    merge(north, cell)
+                    merge(cell, south)
+
+                    grid.tunnelUnder(cell as OverCell)
+                    merge(west, west.east!!)
+                    merge(east, east.west!!)
+                }
+
+                return true
+            }
         }
 
         override val name = "Kruskals"
 
         override fun on(grid: Grid) {
             val state = State(grid)
+            on(state)
+        }
+
+        fun on(state: State) {
             val neighbours = state.neighbours.apply { shuffle() }
 
             while (neighbours.isNotEmpty()) {
