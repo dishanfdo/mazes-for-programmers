@@ -44,7 +44,7 @@ open class Grid protected constructor(val rowCount: Int, val colCount: Int) {
     val rows: Sequence<List<Cell?>>
         get() = grid.asSequence()
 
-    val cells: Sequence<Cell>
+    open val cells: Sequence<Cell>
         get() = rows.map { row -> row.asSequence() }.flatten().filterNotNull()
 
     open operator fun get(row: Int, col: Int): Cell? {
@@ -121,7 +121,7 @@ open class Grid protected constructor(val rowCount: Int, val colCount: Int) {
         return image
     }
 
-    private fun toImageWithInset(graphics: Graphics2D, cell: Cell, mode: PaintMode, cellSize: Int, wall: Color, x: Int, y: Int, inset: Int, defaultBackground: Color) {
+    protected open fun toImageWithInset(graphics: Graphics2D, cell: Cell, mode: PaintMode, cellSize: Int, wall: Color, x: Int, y: Int, inset: Int, defaultBackground: Color) {
         val coordinates = cellCoordinatesWithInset(x, y, cellSize, inset)
         val x1 = coordinates[0]
         val x2 = coordinates[1]
@@ -185,7 +185,7 @@ open class Grid protected constructor(val rowCount: Int, val colCount: Int) {
         }
     }
 
-    private fun toImageWithoutInset(graphics: Graphics2D, cell: Cell, mode: PaintMode, cellSize: Int, wall: Color, x: Int, y: Int, defaultBackground: Color) {
+    protected open fun toImageWithoutInset(graphics: Graphics2D, cell: Cell, mode: PaintMode, cellSize: Int, wall: Color, x: Int, y: Int, defaultBackground: Color) {
         val x1 = x
         val y1 = y
         val x2 = x1 + cellSize
@@ -215,7 +215,7 @@ open class Grid protected constructor(val rowCount: Int, val colCount: Int) {
         }
     }
 
-    private fun cellCoordinatesWithInset(x: Int, y: Int, cellSize: Int, inset: Int): List<Int> {
+    protected fun cellCoordinatesWithInset(x: Int, y: Int, cellSize: Int, inset: Int): List<Int> {
         val x1 = x
         val x4 = x + cellSize
         val x2 = x1 + inset

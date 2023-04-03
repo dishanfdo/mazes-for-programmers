@@ -11,14 +11,14 @@ open class Cell(val row: Int, val column: Int) {
 
     private val _links: MutableMap<Cell, Boolean> = mutableMapOf()
 
-    fun link(cell: Cell, bidirectional: Boolean = true) {
+    open fun link(cell: Cell, bidirectional: Boolean = true) {
         _links[cell] = true
         if (bidirectional) {
             cell.link(this, bidirectional = false)
         }
     }
 
-    fun unlink(cell: Cell, bidirectional: Boolean = true) {
+    open fun unlink(cell: Cell, bidirectional: Boolean = true) {
         _links.remove(cell)
         if (bidirectional) {
             cell.unlink(this, bidirectional = false)
