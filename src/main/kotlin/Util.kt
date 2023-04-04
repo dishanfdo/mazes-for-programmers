@@ -1,6 +1,7 @@
 import java.awt.image.RenderedImage
 import java.io.File
 import javax.imageio.ImageIO
+import kotlin.random.Random
 
 fun <T> MutableCollection<T>.addIfNotNull(value: T?) {
     if (value != null) {
@@ -27,3 +28,6 @@ fun <T> MutableCollection<T>.removeRandomElement(): T {
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun Int.isEven() = this % 2 == 0
+
+private val random = Random(System.currentTimeMillis())
+fun random(until: Int): Int = random.nextInt(until)
